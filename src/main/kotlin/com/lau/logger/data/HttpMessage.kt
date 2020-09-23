@@ -3,15 +3,20 @@ package com.lau.logger.data
 import java.io.Serializable
 
 data class HttpMessage(
-    private val networkType: LogType.Network,
-    val request: HttpRequestMessage,
-    val response: HttpResponseMessage
+    @Transient private val networkType: LogType.Network,
+    var request: HttpRequestMessage,
+    var response: HttpResponseMessage
 ) : Loggable {
     override val type = networkType
+
+    init {
+        request = request.copy(networkType = null)
+        response = response.copy(networkType = null)
+    }
 }
 
 data class HttpRequestMessage(
-    private val networkType: LogType.Network,
+    @Transient private val networkType: LogType.Network?,
     val method: HttpMethod,
     val url: String,
     val headers: Map<String, String>? = null,
@@ -21,7 +26,7 @@ data class HttpRequestMessage(
 }
 
 data class HttpResponseMessage(
-    private val networkType: LogType.Network,
+    @Transient private val networkType: LogType.Network?,
     val code: Int,
     val message: String,
     val url: String,

@@ -8,7 +8,9 @@ import com.lau.logger.data.HttpRequestMessage
 import com.lau.logger.data.HttpResponseMessage
 import java.util.*
 
-class SystemLoggerObserver : LogObserver {
+class SystemLoggerObserver(
+    private val context: Context
+) : LogObserver {
 
     override fun update(uuid: UUID, data: PreparedLog) {
         when(val loggable = data.loggable) {
@@ -26,7 +28,7 @@ class SystemLoggerObserver : LogObserver {
         data.headers
             ?.forEach { key, value -> log("$INDENT$key : $value") }
         data.body
-            ?.let { Context.serializer.serialize(it) }
+            ?.let { context.serializer.serialize(it) }
     }
 
     private fun update(data: HttpResponseMessage) {
@@ -35,7 +37,7 @@ class SystemLoggerObserver : LogObserver {
         data.headers
             ?.forEach { key, value -> log("$INDENT$key : $value") }
         data.body
-            ?.let { Context.serializer.serialize(it) }
+            ?.let { context.serializer.serialize(it) }
     }
 
     private fun log(message: String) {

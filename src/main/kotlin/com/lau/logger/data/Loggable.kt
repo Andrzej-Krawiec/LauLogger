@@ -1,23 +1,25 @@
 package com.lau.logger.data
 
 interface Loggable {
-    val type: LogType
+    val type: LogType?
 }
 
-sealed class LogType {
+sealed class LogType(private val name: String) {
 
-    object Default : LogType()
-    object Selenium : LogType()
-    data class Error(val throwable: Throwable) : LogType()
+    object Default : LogType("Default")
+    object Selenium : LogType("Selenium")
+    data class Error(val throwable: Throwable) : LogType("Error")
 
-    sealed class Test : LogType() {
-        object Suite : Test()
-        object TestCase : Test()
-        object Assertion : Test()
+    sealed class Test(innerName: String) : LogType("Test - $innerName") {
+        object Suite : Test("Suite")
+        object TestCase : Test("TestCase")
+        object Assertion : Test("Assertion")
     }
 
-    sealed class Network : LogType() {
-        object Web : Network()
-        object Device : Network()
+    sealed class Network(innerName: String) : LogType("Network - $innerName") {
+        object Web : Network("Web")
+        object Device : Network("Device")
     }
+
+    override fun toString() = name
 }
