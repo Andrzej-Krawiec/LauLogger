@@ -1,40 +1,32 @@
 package com.lau.logger.data
 
-import java.io.Serializable
+import com.lau.logger.data.LogType.*
 
 data class HttpMessage(
-    @Transient private val networkType: LogType.Network,
     var request: HttpRequestMessage,
-    var response: HttpResponseMessage
+    var response: HttpResponseMessage?
 ) : Loggable {
-    override val type = networkType
-
-    init {
-        request = request.copy(networkType = null)
-        response = response.copy(networkType = null)
-    }
+    override val type = NETWORK_FULL
 }
 
 data class HttpRequestMessage(
-    @Transient private val networkType: LogType.Network?,
     val method: HttpMethod,
     val url: String,
     val headers: Map<String, String>? = null,
-    val body: Serializable? = null
+    val body: Any? = null
 ) : Loggable {
-    override val type = networkType
+    override val type = NETWORK_REQUEST
 }
 
 data class HttpResponseMessage(
-    @Transient private val networkType: LogType.Network?,
     val code: Int,
     val message: String,
     val url: String,
     val duration: Long,
     val headers: Map<String, String>? = null,
-    val body: Serializable? = null
+    val body: Any? = null
 ) : Loggable {
-    override val type = networkType
+    override val type = NETWORK_RESPONSE
 }
 
 enum class HttpMethod {

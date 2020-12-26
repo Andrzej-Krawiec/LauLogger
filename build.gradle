@@ -3,6 +3,8 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
 }
 
+apply plugin: 'maven'
+
 group 'org.example'
 version '1.0-SNAPSHOT'
 

@@ -13,7 +13,7 @@ class LogRelay(
     private val relay = mutableMapOf<UUID, PreparedLog>()
     private val observers = mutableListOf<LogObserver>()
 
-    fun update(uuid: UUID, action: (Loggable) -> Loggable) {
+    @Synchronized fun update(uuid: UUID, action: (Loggable) -> Loggable) {
         relay[uuid]
             ?.let { storedLog ->
                 val updatedLog = storedLog.copy(loggable = action.invoke(storedLog.loggable))
@@ -22,7 +22,7 @@ class LogRelay(
             }
     }
 
-    fun addLog(loggable: Loggable): UUID {
+    @Synchronized fun addLog(loggable: Loggable): UUID {
         val uuid = randomGeneratorApi.generateUUID()
         val preparedLog = PreparedLog(
             time = calendarApi.currentTimeInMillis(),
@@ -38,6 +38,11 @@ class LogRelay(
         if (populate) {
             observer.update(relay)
         }
+    }
+
+    @Synchronized fun clear() {
+        relay.clear()
+        observers.clear()
     }
 }
 

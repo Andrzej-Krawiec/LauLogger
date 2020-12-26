@@ -1,6 +1,9 @@
 package com.lau.logger
 
-import com.lau.logger.data.*
+import com.lau.logger.data.HttpMessage
+import com.lau.logger.data.HttpMethod
+import com.lau.logger.data.HttpRequestMessage
+import com.lau.logger.data.HttpResponseMessage
 import com.lau.logger.observers.JsonFileLoggerObserver
 import com.lau.logger.observers.SystemLoggerObserver
 import java.io.File
@@ -16,7 +19,6 @@ fun main() {
 
     val requestUUid = logger.relay.addLog(
         HttpRequestMessage(
-            networkType = LogType.Network.Web,
             method = HttpMethod.POST,
             url = "https://google.com"
         )
@@ -26,10 +28,8 @@ fun main() {
 
     logger.relay.update(requestUUid) {
         HttpMessage(
-            networkType = LogType.Network.Web,
             request = it as HttpRequestMessage,
             response = HttpResponseMessage(
-                networkType = LogType.Network.Web,
                 code = 200,
                 message = "OK",
                 url = it.url,

@@ -6,7 +6,7 @@ import com.lau.logger.context.Context
 import java.io.File
 import java.util.*
 
-class JsonFileLoggerObserver(
+    class JsonFileLoggerObserver(
     private val context: Context,
     private val file: File
 ) : LogObserver {

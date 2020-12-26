@@ -31,9 +31,12 @@ class SystemLoggerObserver(
             ?.let { context.serializer.serialize(it) }
     }
 
-    private fun update(data: HttpResponseMessage) {
+    private fun update(data: HttpResponseMessage?) {
+        if(data == null)
+            return
+
         log("<--- ${data.code} ${data.message} ${data.url}")
-        log("Duration: ${data.duration}")
+        log("${INDENT}Duration: ${data.duration}")
         data.headers
             ?.forEach { key, value -> log("$INDENT$key : $value") }
         data.body
