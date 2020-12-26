@@ -8,12 +8,12 @@ import com.lau.logger.data.HttpRequestMessage
 import com.lau.logger.data.HttpResponseMessage
 import java.util.*
 
-class SystemLoggerObserver(
-    private val context: Context
-) : LogObserver {
+class SystemLoggerObserver : LogObserver {
+
+    private lateinit var context: Context
 
     override fun update(uuid: UUID, data: PreparedLog) {
-        when(val loggable = data.loggable) {
+        when (val loggable = data.loggable) {
             is HttpRequestMessage -> update(loggable)
             is HttpMessage -> update(loggable.response)
         }
@@ -23,24 +23,23 @@ class SystemLoggerObserver(
         // Not Supported
     }
 
+    override fun provideContext(context: Context) {
+        this.context = context
+    }
+
     private fun update(data: HttpRequestMessage) {
         log("---> ${data.method} ${data.url}")
-        data.headers
-            ?.forEach { key, value -> log("$INDENT$key : $value") }
-        data.body
-            ?.let { context.serializer.serialize(it) }
+        data.headers?.forEach { (key, value) -> log("$INDENT$key : $value") }
+        data.body?.let { context.serializer.serialize(it) }
     }
 
     private fun update(data: HttpResponseMessage?) {
-        if(data == null)
+        if (data == null)
             return
 
-        log("<--- ${data.code} ${data.message} ${data.url}")
-        log("${INDENT}Duration: ${data.duration}")
-        data.headers
-            ?.forEach { key, value -> log("$INDENT$key : $value") }
-        data.body
-            ?.let { context.serializer.serialize(it) }
+        log("<--- ${data.code} ${data.message} ${data.url} (${data.duration}ms)")
+        data.headers?.forEach { (key, value) -> log("$INDENT$key : $value") }
+        data.body?.let { context.serializer.serialize(it) }
     }
 
     private fun log(message: String) {

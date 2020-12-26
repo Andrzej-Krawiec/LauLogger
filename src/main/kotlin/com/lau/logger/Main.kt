@@ -10,14 +10,12 @@ import java.io.File
 
 fun main() {
 
-    val logger = LauLogger()
+    val logger = LauLogger {
+        observers += SystemLoggerObserver()
+        observers += JsonFileLoggerObserver(File("testaaa.json"))
+    }
 
-    logger.relay.addObserver(SystemLoggerObserver(logger.context))
-    val file = File("testaaa.json")
-    file.createNewFile()
-    logger.relay.addObserver(JsonFileLoggerObserver(logger.context, file))
-
-    val requestUUid = logger.relay.addLog(
+    val requestUUid = logger.addLog(
         HttpRequestMessage(
             method = HttpMethod.POST,
             url = "https://google.com"
@@ -26,7 +24,7 @@ fun main() {
 
     Thread.sleep(5_000)
 
-    logger.relay.update(requestUUid) {
+    logger.update(requestUUid) {
         HttpMessage(
             request = it as HttpRequestMessage,
             response = HttpResponseMessage(

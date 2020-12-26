@@ -1,6 +1,8 @@
 package com.lau.logger.data
 
-import com.lau.logger.data.LogType.*
+import com.lau.logger.data.Loggable.Companion.NETWORK_FULL
+import com.lau.logger.data.Loggable.Companion.NETWORK_REQUEST
+import com.lau.logger.data.Loggable.Companion.NETWORK_RESPONSE
 
 data class HttpMessage(
     var request: HttpRequestMessage,

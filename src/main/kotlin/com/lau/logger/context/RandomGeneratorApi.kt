@@ -6,7 +6,6 @@ interface RandomGeneratorApi {
     fun generateUUID(): UUID
 }
 
-class DefaultRandomGenerator: RandomGeneratorApi {
-    override fun generateUUID() : UUID =
-        UUID.randomUUID()
+internal class DefaultRandomGenerator : RandomGeneratorApi {
+    override fun generateUUID(): UUID = UUID.randomUUID()
 }

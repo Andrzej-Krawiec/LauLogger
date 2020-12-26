@@ -1,6 +1,8 @@
 package com.lau.logger.data
 
-import com.lau.logger.data.LogType.*
+import com.lau.logger.data.Loggable.Companion.SELENIUM_CLICK
+import com.lau.logger.data.Loggable.Companion.SELENIUM_INPUT
+import com.lau.logger.data.Loggable.Companion.SELENIUM_NAVIGATE
 
 sealed class SeleniumEvent(override val type: LogType) : Loggable {
 
@@ -20,7 +22,7 @@ sealed class SeleniumEvent(override val type: LogType) : Loggable {
         val toUrl: String,
         val lineNumber: Int? = null,
         val error: Throwable? = null
-    ): SeleniumEvent(SELENIUM_NAVIGATE)
+    ) : SeleniumEvent(SELENIUM_NAVIGATE)
 
     data class Input(
         val name: String? = null,
@@ -31,5 +33,5 @@ sealed class SeleniumEvent(override val type: LogType) : Loggable {
         val lineNumber: Int? = null,
         val screenshot: String? = null,
         val error: Throwable? = null
-    ): SeleniumEvent(SELENIUM_INPUT)
+    ) : SeleniumEvent(SELENIUM_INPUT)
 }

@@ -4,6 +4,6 @@ interface CalendarApi {
     fun currentTimeInMillis(): Long
 }
 
-class DefaultCalendar: CalendarApi {
-    override fun currentTimeInMillis(): Long = System.currentTimeMillis()
+internal class DefaultCalendar : CalendarApi {
+    override fun currentTimeInMillis() = System.currentTimeMillis()
 }

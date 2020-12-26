@@ -1,6 +1,7 @@
 package com.lau.logger
 
 import com.lau.logger.context.CalendarApi
+import com.lau.logger.context.Context
 import com.lau.logger.context.RandomGeneratorApi
 import com.lau.logger.data.Loggable
 import java.util.*
@@ -13,7 +14,8 @@ class LogRelay(
     private val relay = mutableMapOf<UUID, PreparedLog>()
     private val observers = mutableListOf<LogObserver>()
 
-    @Synchronized fun update(uuid: UUID, action: (Loggable) -> Loggable) {
+    @Synchronized
+    fun update(uuid: UUID, action: (Loggable) -> Loggable) {
         relay[uuid]
             ?.let { storedLog ->
                 val updatedLog = storedLog.copy(loggable = action.invoke(storedLog.loggable))
@@ -22,7 +24,8 @@ class LogRelay(
             }
     }
 
-    @Synchronized fun addLog(loggable: Loggable): UUID {
+    @Synchronized
+    fun addLog(loggable: Loggable): UUID {
         val uuid = randomGeneratorApi.generateUUID()
         val preparedLog = PreparedLog(
             time = calendarApi.currentTimeInMillis(),
@@ -40,7 +43,8 @@ class LogRelay(
         }
     }
 
-    @Synchronized fun clear() {
+    @Synchronized
+    fun clear() {
         relay.clear()
         observers.clear()
     }
@@ -54,4 +58,5 @@ data class PreparedLog(
 interface LogObserver {
     fun update(uuid: UUID, data: PreparedLog)
     fun update(data: Map<UUID, PreparedLog>)
+    fun provideContext(context: Context) {}
 }

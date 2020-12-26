@@ -4,5 +4,5 @@ interface LogProvider {
 
 }
 
-class HttpLogProvider: LogProvider {
+class HttpLogProvider : LogProvider {
 }
